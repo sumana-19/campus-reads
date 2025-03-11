@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import Header from "@/components/Header";
-// import { auth } from "@/auth";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 // import { db } from "@/database/drizzle";
@@ -8,9 +8,9 @@ import { after } from "next/server";
 // import { eq } from "drizzle-orm";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
-  //   const session = await auth();
+  const session = await auth();
 
-  //   if (!session) redirect("/sign-in");
+  if (!session) redirect("/sign-in");
 
   //   after(async () => {
   //     if (!session?.user?.id) return;
