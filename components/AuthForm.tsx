@@ -50,22 +50,19 @@ const AuthForm = <T extends FieldValues>({
   });
 
   const handleSubmit: SubmitHandler<T> = async (data) => {
-    //   const result = await onSubmit(data);
-    //   if (result.success) {
-    //     toast({
-    //       title: "Success",
-    //       description: isSignIn
-    //         ? "You have successfully signed in."
-    //         : "You have successfully signed up.",
-    //     });
-    //     router.push("/");
-    //   } else {
-    //     toast({
-    //       title: `Error ${isSignIn ? "signing in" : "signing up"}`,
-    //       description: result.error ?? "An error occurred.",
-    //       variant: "destructive",
-    //     });
-    //   }
+    const result = await onSubmit(data);
+    if (result.success) {
+      toast.success("Success", {
+        description: isSignIn
+          ? "You have successfully signed in."
+          : "You have successfully signed up.",
+      });
+      router.push("/");
+    } else {
+      toast.error(`Error ${isSignIn ? "signing in" : "signing up"}`, {
+        description: result.error ?? "An error occurred.",
+      });
+    }
   };
 
   return (
@@ -98,11 +95,11 @@ const AuthForm = <T extends FieldValues>({
                   <FormControl>
                     {field.name === "universityCard" ? (
                       <FileUpload
-                        // type="image"
-                        // accept="image/*"
-                        // placeholder="Upload your ID"
-                        // folder="ids"
-                        // variant="dark"
+                        type="image"
+                        accept="image/*"
+                        placeholder="Upload your ID"
+                        folder="ids"
+                        variant="dark"
                         onFileChange={field.onChange}
                       />
                     ) : (

@@ -2,9 +2,7 @@
 
 import AuthForm from "@/components/AuthForm";
 import { signUpSchema } from "@/lib/validations";
-// import { signUp } from "@/lib/actions/auth";
-
-const signUp = async (data: any) => {};
+import { signUp } from "@/lib/actions/auth";
 
 const Page = () => (
   <AuthForm
