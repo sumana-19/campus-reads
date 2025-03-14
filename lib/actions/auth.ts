@@ -8,7 +8,7 @@ import { signIn } from "@/auth";
 import { headers } from "next/headers";
 import ratelimit from "@/lib/ratelimit";
 import { redirect } from "next/navigation";
-// import { workflowClient } from "@/lib/workflow";
+import { workflowClient } from "@/lib/workflow";
 import config from "@/lib/config";
 
 export const signInWithCredentials = async (
@@ -76,6 +76,11 @@ export const signUp = async (params: AuthCredentials) => {
     //     fullName,
     //   },
     // });
+    await fetch(`${config.env.prodApiEndpoint}/api/workflows/onboarding`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, fullName }),
+    });
 
     await signInWithCredentials({ email, password });
 
