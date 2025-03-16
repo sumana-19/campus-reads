@@ -76,11 +76,11 @@ export const signUp = async (params: AuthCredentials) => {
     //     fullName,
     //   },
     // });
-    await fetch(`${config.env.prodApiEndpoint}/api/workflows/onboarding`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, fullName }),
-    });
+    // await fetch(`${config.env.prodApiEndpoint}/api/workflows/onboarding`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ email, fullName }),
+    // });
 
     await signInWithCredentials({ email, password });
 
