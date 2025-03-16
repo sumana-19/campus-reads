@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/FileUpload";
 import ColorPicker from "@/components/admin/ColorPicker";
-// import { createBook } from "@/lib/admin/actions/book";
+import { createBook } from "@/lib/admin/actions/book";
 import { toast } from "sonner";
 
 interface Props extends Partial<Book> {
@@ -46,20 +46,19 @@ const BookForm = ({ type, ...book }: Props) => {
   });
 
   const onSubmit = async (values: z.infer<typeof bookSchema>) => {
-    console.log(values);
-    // const result = await createBook(values);
+    const result = await createBook(values);
 
-    // if (result.success) {
-    //   toast.success("Success", {
-    //     description: "Book created successfully",
-    //   });
+    if (result.success) {
+      toast.success("Success", {
+        description: "Book created successfully",
+      });
 
-    //   router.push(`/admin/books/${result.data.id}`);
-    // } else {
-    //   toast.error("Error", {
-    //     description: result.message ?? "An error occurred.",
-    //   });
-    // }
+      router.push(`/admin/books/${result.data.id}`);
+    } else {
+      toast.error("Error", {
+        description: result.message ?? "An error occurred.",
+      });
+    }
   };
 
   return (
