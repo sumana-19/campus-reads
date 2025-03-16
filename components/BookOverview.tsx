@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import BookCover from "./BookCover";
-// import BorrowBook from "@/components/BorrowBook";
-// import { db } from "@/database/drizzle";
-// import { users } from "@/database/schema";
-// import { eq } from "drizzle-orm";
+import BorrowBook from "@/components/BorrowBook";
+import { db } from "@/database/db";
+import { users } from "@/database/schema";
+import { eq } from "drizzle-orm";
 
 interface Props extends Book {
   userId: string;
@@ -22,19 +22,19 @@ const BookOverview = async ({
   id,
   userId,
 }: Props) => {
-  //   const [user] = await db
-  //     .select()
-  //     .from(users)
-  //     .where(eq(users.id, userId))
-  //     .limit(1);
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
 
-  //   const borrowingEligibility = {
-  //     isEligible: availableCopies > 0 && user?.status === "APPROVED",
-  //     message:
-  //       availableCopies <= 0
-  //         ? "Book is not available"
-  //         : "You are not eligible to borrow this book",
-  //   };
+  const borrowingEligibility = {
+    isEligible: availableCopies > 0 && user?.status === "APPROVED",
+    message:
+      availableCopies <= 0
+        ? "Book is not available"
+        : "You are not eligible to borrow this book",
+  };
   return (
     <section className="book-overview">
       <div className="flex flex-1 flex-col gap-5">
@@ -68,13 +68,13 @@ const BookOverview = async ({
 
         <p className="book-description">{description}</p>
 
-        {/* {user && (
+        {user && (
           <BorrowBook
             bookId={id}
             userId={userId}
             borrowingEligibility={borrowingEligibility}
           />
-        )} */}
+        )}
       </div>
 
       <div className="relative flex flex-1 justify-center">
