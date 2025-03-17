@@ -1,20 +1,37 @@
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
+import SearchForm from "@/components/SearchForm";
 import BookList from "@/components/BookList";
-import Search from "@/components/Search";
 import { db } from "@/database/db";
-import { books, borrowRecords } from "@/database/schema";
-import { eq, inArray } from "drizzle-orm";
-import React from "react";
+import { books } from "@/database/schema";
+import { ilike, or } from "drizzle-orm";
 
-const Page = async () => {
-  const allBooks = await db.select().from(books);
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { query?: string };
+}) {
+  const query = searchParams.query || "";
+
+  const allBooks = query
+    ? await db
+        .select()
+        .from(books)
+        .where(
+          or(
+            ilike(books.title, `%${query}%`),
+            ilike(books.author, `%${query}%`),
+            ilike(books.genre, `%${query}%`)
+          )
+        )
+    : await db.select().from(books); // If no query, fetch all books
 
   return (
     <>
-      <Search />
-      <BookList title="All Library Books" books={allBooks} />
+      <SearchForm query={query} />
+      <BookList
+        title={query ? `Search results for "${query}"` : "All Books"}
+        books={allBooks}
+      />
     </>
   );
-};
-
-export default Page;
+}
