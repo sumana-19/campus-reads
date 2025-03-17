@@ -41,7 +41,7 @@ const BorrowBook = ({
           description: "Book borrowed successfully",
         });
 
-        router.push("/");
+        router.push("/my-profile");
       } else {
         toast.error(`Error`, {
           description: result.error,
