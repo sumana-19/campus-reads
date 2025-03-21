@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { sampleBooks } from "@/constants";
 import { db } from "@/database/db";
 import { books, borrowRecords, users } from "@/database/schema";
+import { formatBorrowedBook } from "@/lib/utils";
 import { eq, inArray } from "drizzle-orm";
 import React from "react";
 
@@ -58,25 +59,52 @@ const Page = async () => {
     .limit(1);
   console.log(`userDetails page.tsx: ${JSON.stringify(userDetails, null, 2)}`);
 
-  const borrowedBookIds = await db
-    .select({ bookId: borrowRecords.bookId })
-    .from(borrowRecords)
-    .where(eq(borrowRecords.userId, userId));
-  const bookIds = borrowedBookIds.map((record) => record.bookId);
+  // const borrowedBookIds = await db
+  //   .select({ bookId: borrowRecords.bookId })
+  //   .from(borrowRecords)
+  //   .where(eq(borrowRecords.userId, userId));
+  // const bookIds = borrowedBookIds.map((record) => record.bookId);
 
-  const borrowedBooks = await db
-    .select()
-    .from(books)
-    .where(inArray(books.id, bookIds));
+  // const borrowedBooks = await db
+  //   .select()
+  //   .from(books)
+  //   .where(inArray(books.id, bookIds));
+
+  const borrowedBooksRaw = await db
+    .select({
+      id: books.id,
+      title: books.title,
+      genre: books.genre,
+      coverUrl: books.coverUrl,
+      coverColor: books.coverColor,
+      borrowDate: borrowRecords.borrowDate,
+      dueDate: borrowRecords.dueDate,
+    })
+    .from(borrowRecords)
+    .innerJoin(books, eq(borrowRecords.bookId, books.id))
+    .where(eq(borrowRecords.userId, userId));
+
+  const borrowedBooks = borrowedBooksRaw.map((book) => {
+    const { borrowedText: borrowDate, daysLeftText: dueDate } =
+      formatBorrowedBook(book.borrowDate.toISOString(), book.dueDate);
+
+    return {
+      ...book,
+      borrowDate,
+      dueDate,
+      isLoanedBook: true,
+    };
+  });
+
+  console.log(borrowedBooks[0].borrowDate);
+  console.log(borrowedBooks[0].dueDate);
 
   return (
     <div className="container mx-auto px-6 py-10 flex flex-col md:flex-row gap-10">
-      {/* Left Section: User Details */}
       <div className="md:w-1/3 w-full">
         <UserDetailsCard userDetails={userDetails[0]} session={session} />
       </div>
 
-      {/* Right Section: Borrowed Books */}
       <div className="md:w-2/3 w-full">
         <BookList title="Borrowed Books" books={borrowedBooks} />
       </div>

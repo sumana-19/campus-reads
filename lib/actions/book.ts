@@ -2,7 +2,7 @@
 
 import { db } from "@/database/db";
 import { books, borrowRecords } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import dayjs from "dayjs";
 
 export const borrowBook = async (params: BorrowBookParams) => {
@@ -19,6 +19,22 @@ export const borrowBook = async (params: BorrowBookParams) => {
       return {
         success: false,
         error: "Book is not available for borrowing",
+      };
+    }
+
+    //User can take only one copy of one book
+    const isBookAlreadyBorrowed = await db
+      .select()
+      .from(borrowRecords)
+      .where(
+        and(eq(borrowRecords.userId, userId), eq(borrowRecords.bookId, bookId))
+      )
+      .limit(1);
+
+    if (isBookAlreadyBorrowed.length) {
+      return {
+        success: false,
+        error: "Book is already borrowed",
       };
     }
 
