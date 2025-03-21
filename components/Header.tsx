@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-// import { signOut } from "@/auth";
-import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { cn, getInitials } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -28,7 +26,6 @@ const Header = ({ session }: { session: Session }) => {
             Library
           </Link>
         </li>
-
         <li>
           <Link href="/my-profile">
             <Avatar>
