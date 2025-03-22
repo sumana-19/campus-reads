@@ -1,11 +1,9 @@
 import React from "react";
 import { Search } from "lucide-react"; // Search icon
 import Form from "next/form";
-import { searchBooks } from "@/lib/actions/book";
 import SearchFormReset from "./SearchFormReset";
 
 const SearchForm = ({ query }: { query?: string }) => {
-  console.log(`SearchForm: ${query}`);
   return (
     <div className="flex flex-col items-center text-center gap-4 mt-10 pb-10">
       <p className="font-bebas-neue text-2xl text-light-100">

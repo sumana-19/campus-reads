@@ -29,6 +29,7 @@ const BorrowBook = ({
       toast.error(`Error`, {
         description: message,
       });
+      return;
     }
 
     setBorrowing(true);

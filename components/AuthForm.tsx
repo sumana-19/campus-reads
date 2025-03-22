@@ -26,6 +26,8 @@ import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
 import FileUpload from "@/components/FileUpload";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import emailjs from "@emailjs/browser";
+import config from "@/lib/config";
 
 interface Props<T extends FieldValues> {
   schema: ZodType<T>;
@@ -57,6 +59,29 @@ const AuthForm = <T extends FieldValues>({
           ? "You have successfully signed in."
           : "You have successfully signed up.",
       });
+
+      if (!isSignIn) {
+        try {
+          const { email, fullName } = data;
+          console.log(`Sending mail to ${email} with name ${fullName}`);
+          console.log(`Public key: ${config.env.emailJs.publicApiKey}`);
+
+          await emailjs.send(
+            config.env.emailJs.serviceId,
+            config.env.emailJs.templateId,
+            {
+              to_email: email,
+              name: fullName,
+            },
+            config.env.emailJs.publicApiKey
+          );
+
+          console.log(`Mail sent! email: ${email}, name: ${fullName}`);
+        } catch (error) {
+          console.log(error, "Mailing error");
+        }
+      }
+
       router.push("/");
     } else {
       toast.error(`Error ${isSignIn ? "signing in" : "signing up"}`, {

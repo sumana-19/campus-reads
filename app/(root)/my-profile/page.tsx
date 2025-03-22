@@ -2,7 +2,6 @@ import { auth, signOut } from "@/auth";
 import BookList from "@/components/BookList";
 import UserDetailsCard from "@/components/UserDetailsCard";
 import { Button } from "@/components/ui/button";
-import { sampleBooks } from "@/constants";
 import { db } from "@/database/db";
 import { books, borrowRecords, users } from "@/database/schema";
 import { formatBorrowedBook } from "@/lib/utils";
