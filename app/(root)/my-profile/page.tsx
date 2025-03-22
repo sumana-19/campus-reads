@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { db } from "@/database/db";
 import { books, borrowRecords, users } from "@/database/schema";
 import { formatBorrowedBook } from "@/lib/utils";
-import { eq, inArray } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import React from "react";
 
 const Page = async () => {
@@ -58,12 +58,12 @@ const Page = async () => {
       >
         <Button className="hover:bg-red-600 px-6 py-2">Logout</Button>
       </form>
-      <div className="container mx-auto px-6 py-10 flex flex-col md:flex-row gap-10">
-        <div className="md:w-1/3 w-full">
+      <div className="container mx-auto px-6 py-10 flex flex-col md:flex-row gap-10 lg:w-full">
+        <div className="md:w-2/5 w-full">
           <UserDetailsCard userDetails={userDetails[0]} session={session} />
         </div>
 
-        <div className="md:w-2/3 w-full">
+        <div className="md:w-3/5 w-full">
           <BookList title="Borrowed Books" books={borrowedBooks} />
         </div>
       </div>
